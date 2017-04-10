@@ -19,6 +19,47 @@ class Lodestone{
         }
         return false;
     }
+    
+    public static function findFreeCompany($id){
+        return new FreeCompany($id);
+    }
+}
+
+class FreeCompany{
+    public $id;
+    public $members;
+    
+    function __construct($id) {
+        $this->id = $id;
+        $this->members = array();
+        $this->get_members();
+    }
+    
+    private function get_members(){
+        $url = "http://eu.finalfantasyxiv.com/lodestone/freecompany/$this->id/member/";
+        $html = file_get_html($url);
+        $membersHtml = null;
+        foreach($html->find("ul") as $subHtml){
+            $elemts = $subHtml->find("li[class=entry]");
+            if(count($elemts) >= 1){
+                $membersHtml = $subHtml;
+                break;
+            }
+        }
+        
+        foreach($membersHtml->find("li[class=entry]") as $memberHtml){
+            if(!empty($memberHtml)){
+                $id = split("/",$memberHtml->find("a")[0]->href)[3];
+                $member = array();
+                $member['id'] = $id;
+                $member['name'] = $memberHtml->find("p[class=entry__name]")[0]->innertext;
+                $member['world'] = $memberHtml->find("p[class=entry__world]")[0]->innertext;
+                $this->members[] = $member;
+            }
+            
+        }
+    }
+    
 }
 
 class Character{
@@ -64,7 +105,7 @@ class Character{
         $this->nameday = $this->get_profile_data_by_title("Nameday","character-block__birth");
         $this->guardian = $this->get_profile_data_by_title("Guardian","character-block__name");
         
-        $this->grandCompany = $this->get_profile_data_by_title("Grand Company","character-block__name");
+        $this->grandCompany = split(" /",$this->get_profile_data_by_title("Grand Company","character-block__name"))[0];
         
         $this->parse_freeCompany();
         $this->parse_minions_mounts();
