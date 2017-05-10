@@ -3,6 +3,17 @@
 
 include_once("lodestone_api.php");
 
+$ids = array("4476212","2215586","2238881");
+
+echo "Speed Test</br>=======</br></br>";
+foreach($ids as $id){
+    $startTime = microtime(true);
+
+    Lodestone::findCharacterById("4476212");
+
+    echo "Elapsed time is: ". (microtime(true) - $startTime) ." seconds.</br>";
+}
+
 
 $charakter = Lodestone::findCharacterById("4476212");
 
