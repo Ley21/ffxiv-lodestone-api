@@ -3,6 +3,7 @@
 
 include_once("lodestone_api.php");
 
+/*
 $ids = array("4476212","2215586","2238881");
 
 echo "Speed Test</br>=======</br></br>";
@@ -13,9 +14,9 @@ foreach($ids as $id){
 
     echo "Elapsed time is: ". (microtime(true) - $startTime) ." seconds.</br>";
 }
+*/
 
-
-$charakter = Lodestone::findCharacterById("4476212");
+$charakter = Lodestone::findCharacterByNameAndServer("Bun Bun","Cactuar");
 
 foreach($charakter as $var => $value){
     echo "$var is $value</br>";
