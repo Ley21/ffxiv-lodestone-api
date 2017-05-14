@@ -8,12 +8,11 @@ class Lodestone{
     }
     
     public static function findCharacterByNameAndServer($name,$server){
-        $name = urlencode(ucfirst($name));
+        $name = urlencode(ucwords($name));
         $server = ucfirst($server);
         $url = "http://eu.finalfantasyxiv.com/lodestone/character/?q=$name&worldname=$server";
         $html = file_get_html($url);
         $entries = $html->find("div[class=ldst__window]")[0]->find("div[class=entry]");
-        
         foreach($entries as $entry){
             $entry_name = $entry->find("p[class=entry__name]")[0]->innertext;
             $enty_world = $entry->find("p[class=entry__world]")[0]->innertext;
